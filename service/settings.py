@@ -1,5 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+AUTH_TOKEN: str = "1234"
+
 
 class Config(BaseSettings):
     model_config = SettingsConfigDict(case_sensitive=False)
@@ -16,6 +18,7 @@ class ServiceConfig(Config):
     k_recs: int = 10
 
     log_config: LogConfig
+    token: str = AUTH_TOKEN
 
 
 def get_config() -> ServiceConfig:

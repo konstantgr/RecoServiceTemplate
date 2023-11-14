@@ -4,7 +4,7 @@ from starlette.testclient import TestClient
 
 from service.settings import ServiceConfig
 
-GET_RECO_PATH = "/reco/{model_name}/{user_id}"
+GET_RECO_PATH: str = "/reco/{model_name}/{user_id}"
 
 
 def test_health(
@@ -21,8 +21,9 @@ def test_get_reco_success(
 ) -> None:
     user_id = 123
     path = GET_RECO_PATH.format(model_name="some_model", user_id=user_id)
+
     with client:
-        response = client.get(path)
+        response = client.get(path, headers={"Authorization": "Bearer 1234"})
     assert response.status_code == HTTPStatus.OK
     response_json = response.json()
     assert response_json["user_id"] == user_id
@@ -35,7 +36,35 @@ def test_get_reco_for_unknown_user(
 ) -> None:
     user_id = 10**10
     path = GET_RECO_PATH.format(model_name="some_model", user_id=user_id)
+
     with client:
-        response = client.get(path)
+        response = client.get(path, headers={"Authorization": "Bearer 1234"})
+
     assert response.status_code == HTTPStatus.NOT_FOUND
     assert response.json()["errors"][0]["error_key"] == "user_not_found"
+
+
+def test_get_reco_unknown_token(
+    client: TestClient,
+) -> None:
+    user_id = 123
+    path = GET_RECO_PATH.format(model_name="some_model", user_id=user_id)
+
+    with client:
+        response = client.get(path, headers={"Authorization": "Bearer abracadabra"})
+
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+    assert response.json()["errors"][0]["error_key"] == "token_error"
+
+
+def test_get_reco_for_unknown_model(
+    client: TestClient,
+) -> None:
+    user_id = 123
+    path = GET_RECO_PATH.format(model_name="another_model", user_id=user_id)
+
+    with client:
+        response = client.get(path, headers={"Authorization": "Bearer 1234"})
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json()["errors"][0]["error_key"] == "model_not_found"
