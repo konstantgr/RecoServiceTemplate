@@ -5,6 +5,7 @@ from typing import Any, Dict
 import uvloop
 from fastapi import FastAPI
 
+from models.online_models import AVAILABLE_MODELS
 from service.api.exception_handlers import add_exception_handlers
 from service.api.middlewares import add_middlewares
 from service.api.views import add_views
@@ -36,6 +37,7 @@ def create_app(config: ServiceConfig) -> FastAPI:
     app = FastAPI(debug=False)
     app.state.k_recs = config.k_recs
     app.state.token = config.token
+    app.state.available_models = AVAILABLE_MODELS
 
     add_views(app)
     add_middlewares(app)

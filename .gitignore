@@ -68,3 +68,4 @@ venv.bak/
 
 # local directories
 /data
+/model_weights
