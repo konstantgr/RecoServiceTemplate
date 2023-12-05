@@ -1,7 +1,7 @@
 import logging.config
 import typing as tp
 
-from .settings import ServiceConfig
+from service.settings import ServiceConfig
 
 app_logger = logging.getLogger("app")
 access_logger = logging.getLogger("access")
