@@ -12,6 +12,9 @@ from models.base_model import BaseOnlineModel
 from models.models_mapping import ModelsMapping
 
 
+MOST_POPULAR: List[int] = [10440, 15297, 9728, 13865, 4151, 3734, 2657, 4880, 142, 6809]
+
+
 class DummyModel(BaseOnlineModel):
     def get_reco(self, user_id: int, k_recs: int) -> List[int]:
         dummy: List[int] = list(range(k_recs))
@@ -25,7 +28,7 @@ class JsonModel(BaseOnlineModel):
             self.model = json.load(file, object_hook=hook)
 
     def get_reco(self, user_id: int, k_recs: int) -> List[int]:
-        dummy: List[int] = list(range(k_recs))
+        dummy: List[int] = MOST_POPULAR
         reco = self.model.get(user_id)
 
         if reco is None:
@@ -89,7 +92,7 @@ class VectorBasedAnnModel(BaseOnlineModel):
             reco = self.model.get_item_list_for_user(user_id, top_n=k_recs).tolist()
             return reco
         else:
-            return list(range(k_recs))
+            return MOST_POPULAR
 
 
 class AvailableModelsDict(dict):
@@ -109,6 +112,9 @@ AVAILABLE_MODELS = AvailableModelsDict(
         "als_model": DatasetEmpoweredRecommendationModel(models_mapping.als_model_path),
         "lfm_log_model": DatasetEmpoweredRecommendationModel(models_mapping.lfm_logistic_4_model_path),
         "lfm_warp_model": DatasetEmpoweredRecommendationModel(models_mapping.lfm_warp_4_model_path),
-        "lfm_log_ann_model": VectorBasedAnnModel(models_mapping.lfm_logistic_4_model_path)
+        "lfm_log_ann_model": VectorBasedAnnModel(models_mapping.lfm_logistic_4_ann_model_path),
+        "lfm_warp_ann_model": VectorBasedAnnModel(models_mapping.lfm_warp_4_ann_model_path),
+        "multivae_model": JsonModel(models_mapping.multivae_model_path),
+        'ae_attention_model': JsonModel(models_mapping.ae_attention_path)
     }
 )
