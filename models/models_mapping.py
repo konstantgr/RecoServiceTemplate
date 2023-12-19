@@ -15,3 +15,4 @@ class ModelsMapping(Config):
     lfm_warp_4_ann_model_path: str = "model_weights/LightFM_warp_4_ANN.pkl"
     multivae_model_path: str = "model_weights/MultiVAE-recommendations.json"
     ae_attention_path: str = "model_weights/custom-ae-attention-recommendations.json"
+    ranker_double_path: str = "model_weights/ranker.json"

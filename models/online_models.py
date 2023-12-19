@@ -115,6 +115,7 @@ AVAILABLE_MODELS = AvailableModelsDict(
         "lfm_log_ann_model": VectorBasedAnnModel(models_mapping.lfm_logistic_4_ann_model_path),
         "lfm_warp_ann_model": VectorBasedAnnModel(models_mapping.lfm_warp_4_ann_model_path),
         "multivae_model": JsonModel(models_mapping.multivae_model_path),
-        'ae_attention_model': JsonModel(models_mapping.ae_attention_path)
+        "ae_attention_model": JsonModel(models_mapping.ae_attention_path),
+        "ranker_double_model": JsonModel(models_mapping.ranker_double_path),
     }
 )

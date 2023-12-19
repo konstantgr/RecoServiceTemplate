@@ -28,6 +28,7 @@ jupyter = "^1.0.0"
 matplotlib = "^3.8.2"
 seaborn = "^0.13.0"
 optuna = "^3.4.0"
+shap = "^0.44.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "7.4.3"
