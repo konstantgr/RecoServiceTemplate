@@ -44,17 +44,20 @@ async def get_reco(request: Request, model_name: str, user_id: int, token=Depend
     app_logger.info(f"Request for model: {model_name}")
     app_logger.info(f"Request for user: {user_id}")
 
+    available_models = request.app.state.available_models
+
     if request.app.state.token != token.credentials:
         raise UnauthorizedUserError()
 
     if user_id > 10**9:
         raise UserNotFoundError(error_message=f"User {user_id} not found")
 
-    if model_name != "some_model":
-        raise ModelNotFoundError(error_message=f"Model {model_name} not found")
+    model = available_models.get(
+        model_name, exception=ModelNotFoundError(error_message=f"Model {model_name} not found")
+    )
 
     k_recs = request.app.state.k_recs
-    reco = [42 + i for i in range(k_recs)]
+    reco = model.get_reco(user_id, k_recs)
 
     return RecoResponse(user_id=user_id, items=reco)
 
